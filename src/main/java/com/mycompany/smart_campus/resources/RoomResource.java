@@ -6,6 +6,7 @@ package com.mycompany.smart_campus.resources;
 
 import com.mycompany.smart_campus.CampusStore;
 import com.mycompany.smart_campus.Room;
+import com.mycompany.smart_campus.exceptions.RoomNotEmptyException;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -75,7 +76,7 @@ public class RoomResource {
         URI location = uriInfo.getAbsolutePathBuilder().path(saved.getId()).build();
         return Response.created(location).entity(saved).build();
     }
-
+    
     @DELETE
     @Path("/{roomId}")
     public Response deleteRoom(@PathParam("roomId") String roomId) {
@@ -84,8 +85,7 @@ public class RoomResource {
             return notFound(roomId);
         }
         if (room.getSensorIds() != null && !room.getSensorIds().isEmpty()) {
-            return conflict("Room '" + roomId + "' cannot be deleted while it "
-                    + "has " + room.getSensorIds().size() + " sensor(s) assigned.");
+            throw new RoomNotEmptyException(roomId, room.getSensorIds().size());
         }
         store.removeRoom(roomId);
         return Response.noContent().build();

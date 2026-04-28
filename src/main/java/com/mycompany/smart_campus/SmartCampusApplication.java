@@ -4,8 +4,14 @@
  */
 package com.mycompany.smart_campus;
 
+import com.mycompany.smart_campus.filters.RequestResponseLoggingFilter;
+import com.mycompany.smart_campus.mappers.GenericExceptionMapper;
+import com.mycompany.smart_campus.mappers.LinkedResourceNotFoundExceptionMapper;
+import com.mycompany.smart_campus.mappers.RoomNotEmptyExceptionMapper;
+import com.mycompany.smart_campus.mappers.SensorUnavailableExceptionMapper;
 import com.mycompany.smart_campus.resources.DiscoveryResource;
 import com.mycompany.smart_campus.resources.RoomResource;
+import com.mycompany.smart_campus.resources.SensorResource;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -26,12 +32,16 @@ public class SmartCampusApplication extends Application{
         // Resources
         classes.add(DiscoveryResource.class);
         classes.add(RoomResource.class);
+        classes.add(SensorResource.class);
 
-        // Exception mappers (added in Part 5)
-        // classes.add(...);
+        // Exception mappers
+        classes.add(RoomNotEmptyExceptionMapper.class);
+        classes.add(LinkedResourceNotFoundExceptionMapper.class);
+        classes.add(SensorUnavailableExceptionMapper.class);
+        classes.add(GenericExceptionMapper.class);
 
-        // Filters (added in Part 5)
-        // classes.add(...);
+        // Filters
+        classes.add(RequestResponseLoggingFilter.class);
 
         return classes;
     }
